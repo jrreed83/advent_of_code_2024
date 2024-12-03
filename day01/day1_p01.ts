@@ -1,6 +1,4 @@
 import { parse } from "jsr:@std/csv/parse";
-import { assertEquals } from "jsr:@std/assert";
-import { sortBy } from "jsr:@std/collections/sort-by";
 
 
 const text = await Deno.readTextFile("input.txt");
@@ -24,12 +22,4 @@ for (let i=0; i<col_1.length; i++) {
 }
 
 console.log(`The sum is ${sum}`);
-/*
-const string = "a,b,c\nd,e,f";
 
-assertEquals(parse(string, { skipFirstRow: false }), [["a", "b", "c"], ["d", "e", "f"]]);
-assertEquals(parse(string, { skipFirstRow: true }), [{ a: "d", b: "e", c: "f" }]);
-assertEquals(parse(string, { columns: ["x", "y", "z"] }), [{ x: "a", y: "b", z: "c" }, { x: "d", y: "e", z: "f" }]);
-
-console.log("Complete\n");
-*
