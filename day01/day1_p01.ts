@@ -1,8 +1,8 @@
 import { parse } from "jsr:@std/csv/parse";
-import { unzip, zip} from "jsr:@std/collections";
+import { unzip, zip } from "jsr:@std/collections";
 
-
-const text = await Deno.readTextFile("./inputs/p1/input.txt");
+const filepath = Deno.args[0];
+const text = await Deno.readTextFile(filepath);
 
 // Need a better way of defining the seperator ...
 const X = parse(text, { separator: "   "}).map(

@@ -2,11 +2,11 @@
 import { parse } from "jsr:@std/csv/parse";
 import { unzip } from "jsr:@std/collections";
 
-const text = await Deno.readTextFile("./inputs/p2/input.txt");
+const filepath = Deno.args[0];
+const text = await Deno.readTextFile(filepath);
 
 const data = parse(text, {separator: "   "}).map(
     function fn(item:[string,string]):[number,number] {
-        console.log(item);
         const [a,b] = item;
         return [parseInt(a), parseInt(b)];
     }
