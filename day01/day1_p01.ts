@@ -1,25 +1,23 @@
 import { parse } from "jsr:@std/csv/parse";
+import { unzip, mapNotNullish,zip,runningReduce } from "jsr:@std/collections";
 
 
 const text = await Deno.readTextFile("input.txt");
 
-const col_1 = [];
-const col_2 = [];
+//const col_1 = [];
+//const col_2 = [];
+
 const X = parse(text, { separator: "   "});
+const [x1, x2] = unzip(X);
+const col1 = mapNotNullish( x1, (x) => parseInt(x));
+const col2 = mapNotNullish( x2, (x) => parseInt(x));
 
-for (let i=0; i<X.length; i++) {
-    col_1.push(parseInt(X[i][0]));
-    col_2.push(parseInt(X[i][1]));
-}
+col1.sort();
+col2.sort();
 
-col_1.sort();
-col_2.sort();
-
-let sum = 0;
-
-for (let i=0; i<col_1.length; i++) {
-    sum += Math.abs(col_1[i]-col_2[i]);    
-}
+const diffs = mapNotNullish(zip(col1, col2), ([a,b]) => Math.abs(a-b));
+const sums  = runningReduce(diffs, (sum, current) => sum + current, 0);
+const sum   = sums[sums.length-1];
 
 console.log(`The sum is ${sum}`);
 
