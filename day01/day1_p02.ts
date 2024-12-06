@@ -16,6 +16,7 @@ const [col1, col2] = unzip(data);
 
 const M = {};
 
+
 for (const x of col2) {
     if (x in M) {
         M[x] += 1;
