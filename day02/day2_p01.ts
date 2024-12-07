@@ -1,33 +1,41 @@
 
-import { chunks } from "jsr:@std/collections"
 
-function safe(x): number {
 
-    if (x[1] == x[0]) {
-        return 0;
+const count = Deno.readTextFileSync(Deno.args[0]).split("\n").map( 
+    function line_to_array(line:string): number[] {
+        return line.split(" ").map( (str:string) => Number(str))
     }
-    const increase = (x[1]-x[0]) > 0;
-    const decrease = !increase;
-    for (let i=1; i<x.length-1; i++) {
-        const diff = x[i+1]-x[i];
-
-        if (diff == 0) {
-            return 0;
-        } else if (increase && diff < 0) {
-            return 0;
-        } else if (decrease && diff > 0){
-            return 0;
-        } else if (Math.abs(diff) > 3) {
+).map(
+    function is_array_safe(arr: number[]): number {
+        if (arr.length == 1) {
             return 0;
         }
+
+        // Determine right away if the array is safe or not
+        const increasing_seq = (arr[1]-arr[0]) > 0;
+
+        for (let i=0; i<arr.length-1; i++) {
+
+            const diff = arr[i+1]-arr[i];
+
+            if (increasing_seq && diff < 0) {
+                return 0;
+            } else if (!increasing_seq && diff > 0) {
+                return 0;
+            } else if (diff === 0 || (Math.abs(diff) > 3)) {
+                return 0;
+            } 
+
+        }
+        // Passed the constraints, array is safe
+        return 1;
     }
+).reduce(
+    function fn(prev: number, curr: number): number {
+        return prev+curr;
+    },
+    0
+);
 
-    return 1;
-}
+console.log(`The number of save lines is ${count}`);
 
-
-console.log(safe([7,6,4,2,1]));
-console.log(safe([1,2,7,8,9]));
-console.log(safe([9,7,6,2,1]));
-console.log(safe([1,3,2,4,5]));
-console.log(safe([1,3,6,7,9]));
